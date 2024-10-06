@@ -8,12 +8,6 @@ pipeline {
         SONAR_PROJECT_KEY = 'student'
         SONAR_PROJECT_NAME = 'student'
     }
-
-    triggers {
-        // Allow Jenkins to be triggered remotely (via webhook from GitHub)
-        triggerRemote('my_secret_token')  // Remote trigger token, for GitHub webhook URL
-    }
-
     stages {
         stage('SCM') {
             steps {
