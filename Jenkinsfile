@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'test'  // The label of the node where the job will run
+        label 'test'
     }
 
     environment {
@@ -9,7 +9,7 @@ pipeline {
     }
 
     tools {
-        maven 'Maven 3.8'  // Ensure this matches the name of the Maven installation in Jenkins
+        maven 'Maven 3.8'  
     }
 
     stages {
