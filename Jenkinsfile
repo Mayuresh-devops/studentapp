@@ -37,7 +37,7 @@ pipeline {
                             mvn clean verify sonar:sonar \
                             -Dsonar.projectKey=${env.SONAR_PROJECT_KEY} \
                             -Dsonar.projectName=${env.SONAR_PROJECT_NAME} \
-                            -Dsonar.login=${SONAR_TOKEN}
+                            -Dsonar.token=${SONAR_TOKEN}
                             """
                         }
                     }
