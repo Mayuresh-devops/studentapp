@@ -22,7 +22,7 @@ pipeline {
                 echo "Building the Maven project..."
                 
                 // Install Maven (preferably, do this outside the pipeline if possible)
-                sh 'apt-get update && apt-get install -y maven'
+                sh 'sudo apt-get update && sudo apt-get install -y maven'
                 
                 // Build the project
                 sh 'mvn clean package'
