@@ -1,38 +1,32 @@
 pipeline {
     agent {
-        label 'test'  // Define the label of the node on which this pipeline will run
+        label 'test'  // The label of the node where the job will run
     }
 
     environment {
-        // Define environment variables for SonarQube project properties
+        // SonarQube environment variables
         SONAR_PROJECT_KEY = 'student'
         SONAR_PROJECT_NAME = 'student'
     }
 
-    stages {
-        stage('Pull') {
-            steps {
-                echo "We are pulling from GitHub"
-                // Pulling the code from the GitHub repository
-                git url: 'https://github.com/Unknown6M/studentapp.git', branch: 'master'
-            }
-        }
+    triggers {
+        // Allow Jenkins to be triggered remotely (via webhook from GitHub)
+        triggerRemote('my_secret_token')  // Remote trigger token, for GitHub webhook URL
+    }
 
-        stage('Install Maven') {
+    stages {
+        stage('SCM') {
             steps {
-                echo "Installing Maven..."
-                // Install Maven (assumes Ubuntu/Debian-based system)
-                sh '''
-                sudo apt update
-                sudo apt install -y maven
-                '''
+                echo "Cloning the repository from GitHub"
+                // Clone the repository (you can set branch to '*/main' or as needed)
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
                 echo "Building the Maven project..."
-                // Build the project using Maven
+                // Run Maven commands to clean and package the project
                 sh 'mvn clean package'
             }
         }
@@ -40,13 +34,17 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Run SonarQube analysis using Maven
-                    withSonarQubeEnv() {
-                        sh """
-                        mvn clean verify sonar:sonar \
-                        -Dsonar.projectKey=${env.SONAR_PROJECT_KEY} \
-                        -Dsonar.projectName=${env.SONAR_PROJECT_NAME}
-                        """
+                    // Use the SonarQube authentication token
+                    withCredentials([string(credentialsId: '3941d8f4-cf25-45a1-b576-53d23ecdfa44', variable: 'SONAR_TOKEN')]) {
+                        // Run SonarQube analysis using the SonarQube token
+                        withSonarQubeEnv('SonarQube') {
+                            sh """
+                            mvn clean verify sonar:sonar \
+                            -Dsonar.projectKey=${env.SONAR_PROJECT_KEY} \
+                            -Dsonar.projectName=${env.SONAR_PROJECT_NAME} \
+                            -Dsonar.login=${SONAR_TOKEN}
+                            """
+                        }
                     }
                 }
             }
