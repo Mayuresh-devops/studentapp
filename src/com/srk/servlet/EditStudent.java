@@ -57,4 +57,25 @@ public class EditStudent extends HttpServlet {
         out.print("<table>");  
         out.print("<tr><td></td><td><input type='hidden' name='stdId' value='" + student.getStudentId() + "'/></td></tr>");  
         out.print("<tr><td>Full Name :</td><td><input type='text' name='stdname' value='" + escapeHtml(student.getStudentName()) + "'/></td></tr>");  
-        out.print("<tr><td>Address :</td><td><inp
+        out.print("<tr><td>Address :</td><td><input type='text' name='stdaddrs' value='" + escapeHtml(student.getStudentAddr()) + "'/></td></tr>");  
+        out.print("<tr><td>Age :</td><td><input type='text' name='stdage' value='" + escapeHtml(student.getAge()) + "'/></td></tr>");  
+        out.print("<tr><td>Qualification :</td><td><input type='text' name='stdqual' value='" + escapeHtml(student.getQualification()) + "'/></td></tr>");  
+        out.print("<tr><td>Percentage :</td><td><input type='text' name='stdpercent' value='" + escapeHtml(student.getPercentage()) + "'/></td></tr>");  
+        out.print("<tr><td>Year of Passout :</td><td><input type='text' name='stdyearpass' value='" + escapeHtml(student.getYearPassed()) + "'/></td></tr>");  
+        out.print("<tr><td colspan='2'><input type='submit' value='Edit & Save'/></td></tr>");  
+        out.print("</table>");  
+        out.print("</form>");  
+        
+        out.close();  
+    }  
+    
+    // Utility method to escape HTML to prevent XSS
+    private String escapeHtml(String input) {
+        if (input == null) return null;
+        return input.replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;")
+                    .replaceAll("\"", "&quot;")
+                    .replaceAll("'", "&#39;");
+    }
+}
