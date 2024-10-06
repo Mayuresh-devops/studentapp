@@ -1,7 +1,8 @@
 pipeline {
-    agent any
-
-    environment {
+    agent {
+        label 'test'  // The label of the node where the job will run
+    }
+     environment {
         SONAR_PROJECT_KEY = 'student'
         SONAR_PROJECT_NAME = 'student'
     }
