@@ -15,55 +15,42 @@ import vo.Student;
 
 @WebServlet("/viewStudents")
 public class ViewStudents extends HttpServlet {
-    
-    @Override
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)   
-              throws ServletException, IOException {  
-        response.setContentType("text/html");  
+            throws ServletException, IOException {  
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");  // Set encoding for the response
+        
+        // Ensure the request uses UTF-8 encoding as well
+        request.setCharacterEncoding("UTF-8");
+        
         PrintWriter out = response.getWriter();  
         
-        // Display link to register student
-        out.println("<a href='index.jsp'>Register Student</a>");  
-        out.println("<h1>Students List</h1>");  
+        out.println("<h1>Student List</h1>");
+        out.print("<table border='1'>");
+        out.print("<tr><th>ID</th><th>Name</th><th>Address</th><th>Age</th><th>Qualification</th><th>Percentage</th><th>Year Passed</th></tr>");
         
-        try {
-            // Retrieve all students from the database
-            List<Student> list = StudentDAO.getAllStudents();
-            
-            // Check if there are no students
-            if (list.isEmpty()) {
-                out.println("<p>No students found.</p>");
-            } else {
-                // Create a table to display student information
-                out.print("<table border='1' width='100%'");  
-                out.print("<tr><th>Student ID</th><th>Student Name</th><th>Student Address</th><th>Student Age</th><th>Student Qualification</th><th>Student Percentage</th><th>Student Year Passed</th><th>Edit</th><th>Delete</th></tr>");  
-                
-                // Iterate through the list of students and display each one
-                for (Student student : list) {  
-                    out.print("<tr>");
-                    out.print("<td>" + escapeHtml(student.getStudentId()) + "</td>");
-                    out.print("<td>" + escapeHtml(student.getStudentName()) + "</td>");
-                    out.print("<td>" + escapeHtml(student.getStudentAddr()) + "</td>");
-                    out.print("<td>" + escapeHtml(student.getAge()) + "</td>");
-                    out.print("<td>" + escapeHtml(student.getQualification()) + "</td>");
-                    out.print("<td>" + escapeHtml(student.getPercentage()) + "</td>");
-                    out.print("<td>" + escapeHtml(student.getYearPassed()) + "</td>");
-                    out.print("<td><a href='editStudent?stdId=" + student.getStudentId() + "'>edit</a></td>");
-                    out.print("<td><a href='deleteStudent?stdId=" + student.getStudentId() + "'>delete</a></td>");
-                    out.print("</tr>");
-                }  
-                out.print("</table>");
-            }
-        } catch (Exception e) {
-            // Log the error (use a proper logging framework like log4j or SLF4J in a real-world app)
-            out.println("<p>Error fetching students. Please try again later.</p>");
-            e.printStackTrace();
+        // Get list of students from DAO
+        List<Student> students = StudentDAO.getAllStudents();
+        
+        // Iterate over the list and display each student's information
+        for (Student student : students) {
+            out.print("<tr>");
+            out.print("<td>" + String.valueOf(student.getStudentId()) + "</td>");
+            out.print("<td>" + escapeHtml(student.getStudentName()) + "</td>");
+            out.print("<td>" + escapeHtml(student.getStudentAddr()) + "</td>");
+            out.print("<td>" + String.valueOf(student.getAge()) + "</td>");
+            out.print("<td>" + escapeHtml(student.getQualification()) + "</td>");
+            out.print("<td>" + String.valueOf(student.getPercentage()) + "</td>");
+            out.print("<td>" + String.valueOf(student.getYearPassed()) + "</td>");
+            out.print("</tr>");
         }
         
-        out.close();  
-    }
+        out.print("</table>");
+        out.close();
+    }  
     
-    // Utility method to escape HTML and avoid XSS vulnerabilities
+    // Utility method to escape HTML to prevent XSS
     private String escapeHtml(String input) {
         if (input == null) return null;
         return input.replaceAll("&", "&amp;")
