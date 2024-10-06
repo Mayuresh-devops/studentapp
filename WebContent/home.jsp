@@ -1,49 +1,58 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Display</title>
-<style>
-table#nat{
-	width: 50%;
-	background-color: #c48ec5;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Display Student Information</title>
+    <style>
+        table#nat {
+            width: 50%;
+            background-color: #c48ec5;
+            border-collapse: collapse;
+        }
+
+        table#nat td, table#nat th {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table#nat tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>  
-<% String name =  request.getParameter("fullname");
-	String Addr = request.getParameter("address");
-	String age = request.getParameter("age");
-	String Qual = request.getParameter("qual");
-	String Persent = request.getParameter("percent");
-	String Year = request.getParameter("yop"); %>
-<table id ="nat">
-<tr>
-	<td>Full Name</td>
-	<td><%= name %></td>
-</tr>
-<tr>
-	<td>Address</td>
-	<td><%= Addr %></td>
-</tr>
-<tr>
-	<td>Age</td>
-	<td><%= age %></td>
-</tr>
-<tr>
-	<td>Qualification</td>
-	<td><%= Qual %></td>
-</tr>
-<tr>
-	<td>Percentage</td>
-	<td><%= Persent %></td>
-</tr>
-<tr>
-	<td>Year of Passout</td>
-	<td><%= Year %></td>
-</tr>
+
+<!-- Fetching data using EL (Expression Language) -->
+<table id="nat">
+    <tr>
+        <td>Full Name</td>
+        <td>${param.fullname}</td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>${param.address}</td>
+    </tr>
+    <tr>
+        <td>Age</td>
+        <td>${param.age}</td>
+    </tr>
+    <tr>
+        <td>Qualification</td>
+        <td>${param.qual}</td>
+    </tr>
+    <tr>
+        <td>Percentage</td>
+        <td>${param.percent}</td>
+    </tr>
+    <tr>
+        <td>Year of Passout</td>
+        <td>${param.yop}</td>
+    </tr>
 </table>
+
 </body>
 </html>
