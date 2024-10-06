@@ -4,39 +4,42 @@ pipeline {
     }
 
     environment {
-        // SonarQube environment variables
         SONAR_PROJECT_KEY = 'student'
         SONAR_PROJECT_NAME = 'student'
+    }
+
+    tools {
+        maven 'Maven 3.8'  // Ensure this matches the name of the Maven installation in Jenkins
     }
 
     stages {
         stage('Pull') {
             steps {
-                echo 'We are pulling from GitHub'
-                git 'https://github.com/Unknown6M/studentapp.git'
+                echo "We are pulling from GitHub"
+                git "https://github.com/Unknown6M/studentapp.git"
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the Maven project...'
-
-                // Install Maven (preferably, do this outside the pipeline if possible)
-                sh 'sudo apt-get update && sudo apt-get install -y maven'
-
-                // Build the project
-                sh 'mvn clean package'
+                echo "Building the Maven project..."
+                withMaven() {
+                    sh 'mvn clean package'
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Use the SonarQube authentication token
                     withCredentials([string(credentialsId: '3941d8f4-cf25-45a1-b576-53d23ecdfa44', variable: 'SONAR_TOKEN')]) {
-                        // Run SonarQube analysis using the SonarQube token
-                        withSonarQubeEnv() {
-                            sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=student -Dsonar.projectName='student'"
+                        withSonarQubeEnv('SonarQube') {
+                            sh """
+                            mvn clean verify sonar:sonar \
+                            -Dsonar.projectKey=${env.SONAR_PROJECT_KEY} \
+                            -Dsonar.projectName=${env.SONAR_PROJECT_NAME} \
+                            -Dsonar.login=${SONAR_TOKEN}
+                            """
                         }
                     }
                 }
