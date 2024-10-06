@@ -8,17 +8,26 @@
   <version>2.0</version>
   <packaging>war</packaging>
 
+  <properties>
+    <!-- Set Java version here for consistency -->
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
+      <!-- Compiler Plugin for Java 17 -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>17</source> <!-- Change to 17 for Java 17 -->
-          <target>17</target> <!-- Change to 17 for Java 17 -->
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
+
+      <!-- WAR Plugin -->
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>3.2.3</version>
@@ -27,6 +36,8 @@
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>
+
+      <!-- SonarQube Plugin -->
       <plugin>
         <groupId>org.sonarsource.scanner.maven</groupId>
         <artifactId>sonar-maven-plugin</artifactId>
@@ -50,7 +61,7 @@
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
-      <version>5.0.0</version> <!-- Updated for Java 17 and Jakarta EE 9 -->
+      <version>5.0.0</version> <!-- Jakarta EE 9 version for Java 17 -->
       <scope>provided</scope>
     </dependency>
   </dependencies>
