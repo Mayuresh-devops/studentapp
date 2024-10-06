@@ -16,12 +16,7 @@ pipeline {
                 git 'https://github.com/Unknown6M/studentapp.git'
             }
         }
-        stage('SonarQube Analysis') {
-            def scannerHome = tool 'SonarScanner';
-            withSonarQubeEnv() {
-            sh "${scannerHome}/bin/sonar-scanner"
-            }
-        }
+
         stage('Build') {
             steps {
                 echo 'Building the Maven project...'
@@ -34,6 +29,19 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Use the SonarQube authentication token
+                    withCredentials([string(credentialsId: '3941d8f4-cf25-45a1-b576-53d23ecdfa44', variable: 'SONAR_TOKEN')]) {
+                        // Run SonarQube analysis using the SonarQube token
+                        withSonarQubeEnv() {
+                            sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=student -Dsonar.projectName='student'"
+                        }
+                    }
+                }
+            }
+        }
     }
 
     post {
