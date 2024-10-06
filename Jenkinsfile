@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'test'  // The label of the node where the job will run
+        label 'test'  
     } 
     stage('SCM') {
         git 'https://github.com/Mayuresh-devops/studentapp.git'
