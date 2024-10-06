@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'test'
-    }
+    agent any
 
     environment {
         SONAR_PROJECT_KEY = 'student'
@@ -9,7 +7,7 @@ pipeline {
     }
 
     tools {
-        maven 'Maven 3.8'  
+        maven 'Maven 3.8'  // Ensure this matches your Maven installation in Jenkins
     }
 
     stages {
@@ -23,17 +21,17 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building the Maven project..."
-                withMaven() {
-                    sh 'mvn clean package'
-                }
+                sh 'mvn clean package'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 script {
+                    // Use credentials for SonarQube token
                     withCredentials([string(credentialsId: '3941d8f4-cf25-45a1-b576-53d23ecdfa44', variable: 'SONAR_TOKEN')]) {
-                        withSonarQubeEnv('SonarQube') {
+                        // Use the configured SonarQube environment
+                        withSonarQubeEnv('SonarQube') {  // Ensure this name matches exactly with your configuration
                             sh """
                             mvn clean verify sonar:sonar \
                             -Dsonar.projectKey=${env.SONAR_PROJECT_KEY} \
